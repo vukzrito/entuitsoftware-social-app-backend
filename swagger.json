@@ -1,0 +1,83 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Node.js API with Firebase Authentication",
+    "description": "API documentation for the Node.js project with Firebase Authentication",
+    "version": "1.0.0"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/api/protected": {
+      "get": {
+        "summary": "Protected Endpoint",
+        "description": "Access this endpoint only with a valid Firebase Authentication token.",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                },
+                "user": { //example user object
+                    "type": "object",
+                    "properties":{
+                        "uid":{
+                            "type":"string"
+                        },
+                         "email":{
+                            "type":"string"
+                        }
+                    }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "error": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+     "/": {
+      "get": {
+        "summary": "Default Endpoint",
+        "description": "Returns a welcome message",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "schema": {
+              "type": "string"
+                     }
+                   }
+                 }
+               }
+             }
+           },
+  "securityDefinitions": {
+    "BearerAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Enter your Bearer token in the format 'Bearer <token>'"
+    }
+  }
+}
