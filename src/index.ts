@@ -15,13 +15,19 @@ declare global {
 }
 
 // Initialize Firebase Admin SDK
-const serviceAccount = require("../serviceAccountKey.json"); // Path to your service account key
+
+const serviceAccount =
+  process.env.NODE_ENV === "development"
+    ? require("../serviceAccountKey.json")
+    : JSON.parse(process.env.GOOGLE_CREDS || "");
+
+// ...
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8088;
 
 // Example API endpoint (protected with Firebase Authentication)
 app.get("/api/protected", authenticate, (req: Request, res: Response) => {
