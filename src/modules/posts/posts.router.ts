@@ -1,15 +1,15 @@
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import { PostsService } from "./posts.service";
 import { PostsTypes } from "./posts.types";
 import { authenticate } from "../middleware/auth";
 
 export const postsRouter = Router()
-  .get("/feed", authenticate, async (req, res) => {
+  .get("/feed", authenticate, async (req: Request, res: Response) => {
     const userId = req.user?.uid;
     const feed = await PostsService.getUserFeed(userId!);
     res.status(200).json(feed);
   })
-  .post("/create", authenticate, async (req, res) => {
+  .post("/create", authenticate, async (req: Request, res: Response) => {
     const userId = req.user?.uid;
     const {
       caption,
