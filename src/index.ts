@@ -37,8 +37,8 @@ app.get("/api/protected", authenticate, (req: Request, res: Response) => {
   });
 });
 
-app.use("/auth", authRouter);
-app.use("/posts", postsRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/posts", postsRouter);
 // Serve Swagger documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
