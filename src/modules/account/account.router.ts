@@ -19,6 +19,12 @@ export const accountRouter = Router()
 
     res.status(201).json({ allRequests });
   })
+  .get("search", authenticate, async (req: Request, res: Response) => {
+    const keyword = req.params.keyword || "";
+    const userId = req.user?.uid || "";
+
+    res.status(200).json([]);
+  })
 
   .delete("/:id", authenticate, async (req: Request, res: Response) => {
     const userId = req.user?.uid || "";
@@ -30,7 +36,7 @@ export const accountRouter = Router()
     );
 
     res.status(201).json({ allRequests });
-  })
+  });
 
 //   .get("/:id/requests", authenticate, async (req: Request, res: Response) => {
 //     const userId = req.user?.uid || "";

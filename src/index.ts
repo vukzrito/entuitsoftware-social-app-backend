@@ -5,6 +5,7 @@ import { authRouter } from "./modules/auth/auth.router";
 import { postsRouter } from "./modules/posts/posts.router";
 import { authenticate } from "./modules/middleware/auth";
 import cors from "cors";
+import { adminRoutes } from "./modules/admin/admin.router";
 
 const swaggerDocument = require("../swagger.json"); // Import Swagger definition
 
@@ -46,6 +47,7 @@ app.get("/api/protected", authenticate, (req: Request, res: Response) => {
 
 app.use("/api/auth", authRouter);
 app.use("/api/posts", postsRouter);
+app.use("/api/admin", adminRoutes);
 // Serve Swagger documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
