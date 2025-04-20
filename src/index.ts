@@ -4,6 +4,8 @@ import * as swaggerUi from "swagger-ui-express";
 import { authRouter } from "./modules/auth/auth.router";
 import { postsRouter } from "./modules/posts/posts.router";
 import { authenticate } from "./modules/middleware/auth";
+import cors from "cors";
+
 const swaggerDocument = require("../swagger.json"); // Import Swagger definition
 
 declare global {
@@ -28,6 +30,11 @@ admin.initializeApp({
 
 const app = express();
 const port = process.env.PORT || 8088;
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://socialapp-884c3.web.app"],
+  })
+);
 
 // Example API endpoint (protected with Firebase Authentication)
 app.get("/api/protected", authenticate, (req: Request, res: Response) => {
