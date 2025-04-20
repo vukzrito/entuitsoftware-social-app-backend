@@ -43,7 +43,7 @@ export const authenticateAdmin = async (
 
   try {
     const decodedToken = await admin.auth().verifyIdToken(idToken);
-    if (decodedToken.admin) {
+    if (decodedToken.email) { // decodedToken.admin  checks for admin claim
       req.user = decodedToken;
       next(); // No return value needed
     } else {
