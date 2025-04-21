@@ -9,9 +9,21 @@ export const adminRoutes = Router()
       const pageToken = req.query.pageToken as string;
 
       const listUsersResult = await admin.auth().listUsers(pageSize, pageToken);
+      // Remove sensitive fields from user objects
+      const sanitizedUsers = listUsersResult.users.map(user => ({
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        photoURL: user.photoURL,
+        disabled: user.disabled,
+        metadata: {
+          creationTime: user.metadata.creationTime,
+          lastSignInTime: user.metadata.lastSignInTime
+        }
+      }));
 
       res.status(200).json({
-        users: listUsersResult.users,
+        users: sanitizedUsers,
         pageToken: listUsersResult.pageToken,
       });
     } catch (error) {

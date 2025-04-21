@@ -6,6 +6,8 @@ import { postsRouter } from "./modules/posts/posts.router";
 import { authenticate } from "./modules/middleware/auth";
 import cors from "cors";
 import { adminRoutes } from "./modules/admin/admin.router";
+import { creatorRequestsRouter } from "./modules/creator-requests/creator-requests.router";
+import { accountRouter } from "./modules/account/account.router";
 
 const swaggerDocument = require("../swagger.json"); // Import Swagger definition
 
@@ -45,9 +47,11 @@ app.get("/api/protected", authenticate, (req: Request, res: Response) => {
   });
 });
 
+app.use("/api/account", accountRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/posts", postsRouter);
 app.use("/api/admin", adminRoutes);
+app.use("/api/creator-requests", creatorRequestsRouter);
 // Serve Swagger documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 

@@ -1,10 +1,10 @@
 import { Router, Request, Response } from "express";
-import { authenticate } from "../middleware/auth";
+import { authenticate, authenticateAdmin } from "../middleware/auth";
 import { CreatorRequestsService } from "./creator-requests.service";
 import { CreatorRequestsTypes } from "./creator-requests.types";
 import { Timestamp } from "firebase-admin/firestore";
 
-export const postsRouter = Router()
+export const creatorRequestsRouter = Router()
   .get("/feed", authenticate, async (req: Request, res: Response) => {
     const userId = req.user?.uid;
     const feed = await CreatorRequestsService.getRequests(userId!);
@@ -26,4 +26,16 @@ export const postsRouter = Router()
     );
 
     res.status(201).json({ allRequests });
+  })
+  .post("/approve/:id", authenticateAdmin, async (req: Request, res: Response) => {
+    const userId = req.user?.uid || "";
+    const requestId = req.params.id;
+    await CreatorRequestsService.approveRequest(userId, requestId);
+    res.status(200).json();
+  })
+  .post("/reject/:id", authenticateAdmin, async (req: Request, res: Response) => {
+    const userId = req.user?.uid || "";
+    const requestId = req.params.id;
+    await CreatorRequestsService.rejectRequest(userId, requestId);
+    res.status(200).json();
   });

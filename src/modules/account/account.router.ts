@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import { authenticate } from "../middleware/auth";
 import { CreatorRequestsService } from "../creator-requests/creator-requests.service";
+import { AccountService } from "./account-service";
 
 export const accountRouter = Router()
   .get("/feed", authenticate, async (req: Request, res: Response) => {
@@ -21,9 +22,9 @@ export const accountRouter = Router()
   })
   .get("search", authenticate, async (req: Request, res: Response) => {
     const keyword = req.params.keyword || "";
-    const userId = req.user?.uid || "";
 
-    res.status(200).json([]);
+    const results = await AccountService.searchUsers(keyword);
+    res.status(200).json(results);
   })
 
   .delete("/:id", authenticate, async (req: Request, res: Response) => {
