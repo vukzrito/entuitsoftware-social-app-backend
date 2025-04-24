@@ -9,6 +9,13 @@ export const accountRouter = Router()
     const feed = await CreatorRequestsService.getRequests(userId!);
     res.status(200).json(feed);
   })
+  .get("/search", authenticate, async (req: Request, res: Response) => {
+    const keyword = req.params.keyword || "";
+    console.log("keyword", keyword);
+    console.log("req.params", req.params);
+    const results = await AccountService.searchUsers(keyword);
+    res.status(200).json(results);
+  })
   .post("/create", authenticate, async (req: Request, res: Response) => {
     const userId = req.user?.uid || "";
     const creatorRequest = req.body;
@@ -20,12 +27,7 @@ export const accountRouter = Router()
 
     res.status(201).json({ allRequests });
   })
-  .get("search", authenticate, async (req: Request, res: Response) => {
-    const keyword = req.params.keyword || "";
 
-    const results = await AccountService.searchUsers(keyword);
-    res.status(200).json(results);
-  })
 
   .delete("/:id", authenticate, async (req: Request, res: Response) => {
     const userId = req.user?.uid || "";
@@ -38,11 +40,7 @@ export const accountRouter = Router()
 
     res.status(201).json({ allRequests });
   })
-  .get("search", authenticate, async (req: Request, res: Response) => {
-    const keyword = req.params.keyword || "";
-    const results = await AccountService.searchUsers(keyword);
-    res.status(200).json(results);
-  });
+;
 
 //   .get("/:id/requests", authenticate, async (req: Request, res: Response) => {
 //     const userId = req.user?.uid || "";
