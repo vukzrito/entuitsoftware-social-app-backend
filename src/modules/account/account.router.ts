@@ -37,6 +37,11 @@ export const accountRouter = Router()
     );
 
     res.status(201).json({ allRequests });
+  })
+  .get("search", authenticate, async (req: Request, res: Response) => {
+    const keyword = req.params.keyword || "";
+    const results = await AccountService.searchUsers(keyword);
+    res.status(200).json(results);
   });
 
 //   .get("/:id/requests", authenticate, async (req: Request, res: Response) => {
