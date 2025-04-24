@@ -82,11 +82,14 @@ export namespace AccountService {
     startAfterDoc?: string
   ): Promise<CommonTypes.PaginatedResult<AuthTypes.User>> => {
     const usersRef = admin.firestore().collection("users");
-    let query = usersRef
-      .where("username", ">=", searchTerm)
-      .where("username", "<=", searchTerm + "\uf8ff")
-      .orderBy("username")
-      .limit(pageSize + 1);
+    let query = usersRef.orderBy("username").limit(pageSize + 1);
+
+    // Only apply search filters if a search term is provided
+    if (searchTerm) {
+      query = query
+        .where("username", ">=", searchTerm)
+        .where("username", "<=", searchTerm + "\uf8ff");
+    }
 
     if (startAfterDoc) {
       const lastDoc = await usersRef.doc(startAfterDoc).get();
