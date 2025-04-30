@@ -5,6 +5,16 @@ import { CreatorRequestsTypes } from "./creator-requests.types";
 import { Timestamp } from "firebase-admin/firestore";
 
 export const creatorRequestsRouter = Router()
+  .get("/", authenticate, async (req: Request, res: Response) => {
+    CreatorRequestsService.getAllRequests()
+      .then((requests) => {
+        res.status(200).json(requests);
+      })
+      .catch((error) => {
+        console.error("Error fetching requests:", error);
+        res.status(500).json({ error: "Internal server error" });
+      });
+  })
   .get("/feed", authenticate, async (req: Request, res: Response) => {
     const userId = req.user?.uid;
     const feed = await CreatorRequestsService.getRequests(userId!);
@@ -27,15 +37,23 @@ export const creatorRequestsRouter = Router()
 
     res.status(201).json({ allRequests });
   })
-  .post("/approve/:id", authenticateAdmin, async (req: Request, res: Response) => {
-    const userId = req.user?.uid || "";
-    const requestId = req.params.id;
-    await CreatorRequestsService.approveRequest(userId, requestId);
-    res.status(200).json();
-  })
-  .post("/reject/:id", authenticateAdmin, async (req: Request, res: Response) => {
-    const userId = req.user?.uid || "";
-    const requestId = req.params.id;
-    await CreatorRequestsService.rejectRequest(userId, requestId);
-    res.status(200).json();
-  });
+  .post(
+    "/approve/:id",
+    authenticateAdmin,
+    async (req: Request, res: Response) => {
+      const userId = req.user?.uid || "";
+      const requestId = req.params.id;
+      await CreatorRequestsService.approveRequest(userId, requestId);
+      res.status(200).json();
+    }
+  )
+  .post(
+    "/reject/:id",
+    authenticateAdmin,
+    async (req: Request, res: Response) => {
+      const userId = req.user?.uid || "";
+      const requestId = req.params.id;
+      await CreatorRequestsService.rejectRequest(userId, requestId);
+      res.status(200).json();
+    }
+  );
