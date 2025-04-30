@@ -24,24 +24,16 @@ export namespace CreatorRequestsService {
     });
     return result;
   };
-  export const getRequests = async (userId: string) => {
-    const requests = await admin
-      .firestore()
-      .collection("users")
-      .doc(userId)
-      .collection("creatorRequests")
-      .get();
-
-    return requests.docs.map((doc) => doc.data());
-  };
 
   export const getAllRequests = async () => {
     const requests = await admin
       .firestore()
       .collection("creatorRequests")
       .get();
-
-    return requests.docs.map((doc) => doc.data());
+    return requests.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as CreatorRequestsTypes.CreatorRequest[];
   };
   export const getPendingCreatorRequests = async (
     pageSize: number = 10,
