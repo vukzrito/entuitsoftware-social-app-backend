@@ -10,7 +10,7 @@ export const accountRouter = Router()
     res.status(200).json(feed);
   })
   .get("/search", authenticate, async (req: Request, res: Response) => {
-    const keyword = req.params.keyword || "";
+    const keyword = req.query.keyword  as string|| "";
     console.log("keyword", keyword);
     console.log("req.params", req.params);
     const results = await AccountService.searchUsers(keyword);

@@ -82,23 +82,24 @@ export namespace AccountService {
     startAfterDoc?: string
   ): Promise<CommonTypes.PaginatedResult<AuthTypes.User>> => {
     const usersRef = admin.firestore().collection("users");
-    let query = usersRef.orderBy("username").limit(pageSize + 1);
+    let query = usersRef.limit(pageSize + 1);
 
     // Only apply search filters if a search term is provided
-    if (searchTerm) {
-      query = query
-        .where("username", ">=", searchTerm)
-        .where("username", "<=", searchTerm + "\uf8ff");
-    }
+    // if (searchTerm) {
+    //   query = query
+    //     .where("username", ">=", searchTerm)
+    //     .where("username", "<=", searchTerm + "\uf8ff");
+    // }
 
-    if (startAfterDoc) {
-      const lastDoc = await usersRef.doc(startAfterDoc).get();
-      if (lastDoc.exists) {
-        query = query.startAfter(lastDoc);
-      }
-    }
+    // if (startAfterDoc) {
+    //   const lastDoc = await usersRef.doc(startAfterDoc).get();
+    //   if (lastDoc.exists) {
+    //     query = query.startAfter(lastDoc);
+    //   }
+    // }
 
     const snapshot = await query.get();
+    console.log(snapshot.docs)
     const users = snapshot.docs.map((doc) => ({
       uid: doc.id,
       ...doc.data(),
