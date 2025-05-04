@@ -4,10 +4,10 @@ import { CreatorRequestsService } from "../creator-requests/creator-requests.ser
 import { AccountService } from "./account-service";
 
 export const accountRouter = Router()
-  .get("/feed", authenticate, async (req: Request, res: Response) => {
+  .get("/creator-requests", authenticate, async (req: Request, res: Response) => {
     const userId = req.user?.uid;
-    const feed = await CreatorRequestsService.getRequests(userId!);
-    res.status(200).json(feed);
+    const requests = await CreatorRequestsService.getCreatorRequestForUser(userId!);
+    res.status(200).json(requests);
   })
   .get("/search", authenticate, async (req: Request, res: Response) => {
     const keyword = req.query.keyword  as string|| "";

@@ -82,6 +82,28 @@ export namespace CreatorRequestsService {
     } as CreatorRequestsTypes.CreatorRequest;
   };
 
+  export const getCreatorRequestForUser = async (
+    userId: string,
+    pageSize: number = 10,
+    startAfterDoc?: string
+  ): Promise<CreatorRequestsTypes.CreatorRequest[]> => {
+    const requestsRef = admin.firestore().collection("creatorRequests");
+    let query = await requestsRef
+      .orderBy("createdAt", "desc")
+      //.where("status", "==", "pending")
+      .where("userId", "==", userId)
+      .limit(pageSize + 1)
+      .get();
+    const result: CreatorRequestsTypes.CreatorRequest[] = [];
+    query.docs.forEach((doc) => {
+      result.push({
+        id: doc.id,
+        ...doc.data(),
+      } as CreatorRequestsTypes.CreatorRequest);
+    });
+    return result;
+  };
+
   export const approveRequest = async (userId: string, requestId: string) => {
     const requestRef = admin
       .firestore()

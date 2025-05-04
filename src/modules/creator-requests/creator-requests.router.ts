@@ -17,7 +17,7 @@ export const creatorRequestsRouter = Router()
   })
   .get("/feed", authenticate, async (req: Request, res: Response) => {
     const userId = req.user?.uid;
-    const feed = await CreatorRequestsService.getRequests(userId!);
+    const feed = await CreatorRequestsService.getCreatorRequestForUser(userId!);
     res.status(200).json(feed);
   })
   .post("/create", authenticate, async (req: Request, res: Response) => {
