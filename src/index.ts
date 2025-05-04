@@ -8,8 +8,11 @@ import cors from "cors";
 import { adminRoutes } from "./modules/admin/admin.router";
 import { creatorRequestsRouter } from "./modules/creator-requests/creator-requests.router";
 import { accountRouter } from "./modules/account/account.router";
+import { subscriptionsRouter } from "./modules/subscriptions/subscriptions.router";
 
 const swaggerDocument = require("../swagger.json"); // Import Swagger definition
+
+require('dotenv').config();
 
 declare global {
   namespace Express {
@@ -52,6 +55,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/posts", postsRouter);
 app.use("/api/admin", adminRoutes);
 app.use("/api/creator-requests", creatorRequestsRouter);
+app.use("/api/subscriptions", subscriptionsRouter)
 // Serve Swagger documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
