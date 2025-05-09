@@ -14,6 +14,11 @@ export namespace SubscriptionsTypes {
     updatedAt: Timestamp;
     status: SubscriptionStatus;
     platform: SubscriptionPlatform;
+    nextBillingDate?: Timestamp;
+    lastBillingDate?: Timestamp;
+    trialEndDate?: Timestamp;
+    trialStartDate?: Timestamp;
+    trialDuration?: number;
     metadata?: {
       [key: string]: any;
     };

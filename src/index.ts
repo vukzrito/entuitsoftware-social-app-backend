@@ -9,6 +9,7 @@ import { adminRoutes } from "./modules/admin/admin.router";
 import { creatorRequestsRouter } from "./modules/creator-requests/creator-requests.router";
 import { accountRouter } from "./modules/account/account.router";
 import { subscriptionsRouter } from "./modules/subscriptions/subscriptions.router";
+import { paymentsRouter } from "./modules/payments/payments.router";
 
 const swaggerDocument = require("../swagger.json"); // Import Swagger definition
 
@@ -56,6 +57,7 @@ app.use("/api/posts", postsRouter);
 app.use("/api/admin", adminRoutes);
 app.use("/api/creator-requests", creatorRequestsRouter);
 app.use("/api/subscriptions", subscriptionsRouter)
+app.use("/api/payments", paymentsRouter)
 // Serve Swagger documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
