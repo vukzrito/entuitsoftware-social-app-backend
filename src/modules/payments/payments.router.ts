@@ -1,8 +1,10 @@
 import { Router, Request, Response } from "express";
 import { authenticate } from "../middleware/auth";
 import { PayStackService } from "../integrations/paystack/paystack.service";
+import admin from "firebase-admin";
 
 interface PaystackAccessCodeRequest extends Request {
+  user?: admin.auth.DecodedIdToken;
   query: {
     amount: string;
     currency?: string;
