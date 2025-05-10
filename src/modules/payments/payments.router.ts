@@ -27,24 +27,25 @@ export const paymentsRouter = Router()
         return;
       }
 
-      const accessCode = await PayStackService.getAccessCode(
+      const response = await PayStackService.getAccessCode(
         email,
         amount,
         currency
       );
-      res.status(200).json({ accessCode });
+      res.status(200).json(response.data);
     }
   )
   .post(
     "/paystack/verify",
     authenticate,
     async (req: Request, res: Response) => {}
-  ).post(
+  )
+  .post(
     "/paystack/success",
     authenticate,
     async (req: Request, res: Response) => {
-        console.log("req.body", req.body);
-        const { event, data } = req.body;
-        res.status(200).json({ });
+      console.log("req.body", req.body);
+      const { event, data } = req.body;
+      res.status(200).json({});
     }
   );
