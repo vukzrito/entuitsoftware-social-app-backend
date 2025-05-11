@@ -11,7 +11,15 @@ export namespace AccountService {
       .doc(userId)
       .get();
 
-    return account.data();
+    const creator = await admin
+      .firestore()
+      .collection("creators")
+      .doc(userId)
+      .get();
+    return {
+      ...account.data(),
+      creator,
+    } as unknown as AccountTypes.UserAccount;
   };
 
   export const updateAccount = async (userId: string, data: any) => {
@@ -99,7 +107,7 @@ export namespace AccountService {
     // }
 
     const snapshot = await query.get();
-    console.log(snapshot.docs)
+    console.log(snapshot.docs);
     const users = snapshot.docs.map((doc) => ({
       uid: doc.id,
       ...doc.data(),

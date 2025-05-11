@@ -1,6 +1,9 @@
 import * as admin from "firebase-admin";
 import { CreatorRequestsTypes } from "./creator-requests.types";
 import { CommonTypes } from "../common/common.types";
+import { AccountService } from "../account/account-service";
+import { AccountTypes } from "../account/account.types";
+import { SubscriptionsIntegrationService } from "../integrations/subscriptions.integration.service";
 
 export namespace CreatorRequestsService {
   export const createRequest = async (
@@ -105,6 +108,8 @@ export namespace CreatorRequestsService {
   };
 
   export const approveRequest = async (userId: string, requestId: string) => {
+    const defaultPlanAmount = 15.99;
+    // const defaultPlanAppleSKU = "com.social.subscription";
     const requestRef = admin
       .firestore()
       .collection("users")
@@ -114,9 +119,27 @@ export namespace CreatorRequestsService {
 
     await requestRef.update({ status: "approved" });
 
+    const user = (await AccountService.getAccount(
+      userId
+    )) as AccountTypes.UserAccount;
+
+    const username = user.username || user.email;
+
+    //create subcription plan on payment gateway/ platform IAP stores
+    const { androidSKU, appleSKU, paystackSKU } =
+      await SubscriptionsIntegrationService.createSubscriptionProducts(
+        username,
+        defaultPlanAmount
+      );
+
     // Add user to creators collection
     await admin.firestore().collection("creators").doc(userId).set({
       approvedAt: admin.firestore.FieldValue.serverTimestamp(),
+      subscriptionAmount: defaultPlanAmount,
+      subscriptionCurrency: "ZAR",
+      appleSKU,
+      androidSKU,
+      paystackSKU,
     });
   };
 

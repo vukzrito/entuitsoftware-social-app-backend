@@ -9,6 +9,7 @@ interface PaystackAccessCodeRequest extends Request {
     amount: string;
     currency?: string;
     subscriptionId?: string;
+    plan?: string;
   };
 }
 
@@ -21,16 +22,22 @@ export const paymentsRouter = Router()
       const email = req.user?.email;
       const amount = parseInt(req.query.amount);
       const currency = req.query.currency || "ZAR";
-
+      const plan = req.query.plan;
+      if (!plan) {
+        console.error("No subscription plan code provided");
+        res.status(400).json({ error: "No subscription plan code provided" });
+        return;
+      }
       if (!email) {
         res.status(400).json({ error: "Email is required" });
         return;
       }
 
-      const response = await PayStackService.getAccessCode(
+      const response = await PayStackService.getAccessCodeForSubscription(
         email,
         amount,
-        currency
+        currency,
+        plan!
       );
       res.status(200).json(response.data);
     }
@@ -38,7 +45,9 @@ export const paymentsRouter = Router()
   .post(
     "/paystack/verify",
     authenticate,
-    async (req: Request, res: Response) => {}
+    async (req: Request, res: Response) => {
+      res.status(500).json({ error: "Method not implemented" });
+    }
   )
   .post(
     "/paystack/success",
