@@ -21,8 +21,8 @@ export namespace CreatorRequestsService {
     const result: CreatorRequestsTypes.CreatorRequest[] = [];
     allusersRequests.docs.forEach((doc) => {
       result.push({
-        id: doc.id,
         ...doc.data(),
+        id: doc.id,
       } as CreatorRequestsTypes.CreatorRequest);
     });
     return result;
@@ -34,8 +34,8 @@ export namespace CreatorRequestsService {
       .collection("creatorRequests")
       .get();
     return requests.docs.map((doc) => ({
-      id: doc.id,
       ...doc.data(),
+      id: doc.id,
     })) as CreatorRequestsTypes.CreatorRequest[];
   };
   export const getPendingCreatorRequests = async (
@@ -57,8 +57,8 @@ export namespace CreatorRequestsService {
     }
     const snapshot = await query.get();
     const requests = snapshot.docs.map((doc) => ({
-      id: doc.id,
       ...doc.data(),
+      id: doc.id,
     })) as CreatorRequestsTypes.CreatorRequest[];
     // Remove the extra document we fetched to determine if there are more results
     const hasMore = requests.length > pageSize;
@@ -80,8 +80,8 @@ export namespace CreatorRequestsService {
       throw new Error("Request not found");
     }
     return {
-      id: requestDoc.id,
       ...requestDoc.data(),
+      id: requestDoc.id,
     } as CreatorRequestsTypes.CreatorRequest;
   };
 
@@ -100,8 +100,8 @@ export namespace CreatorRequestsService {
     const result: CreatorRequestsTypes.CreatorRequest[] = [];
     query.docs.forEach((doc) => {
       result.push({
-        id: doc.id,
         ...doc.data(),
+        id: doc.id,
       } as CreatorRequestsTypes.CreatorRequest);
     });
     return result;
