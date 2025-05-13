@@ -112,8 +112,6 @@ export namespace CreatorRequestsService {
     // const defaultPlanAppleSKU = "com.social.subscription";
     const requestRef = admin
       .firestore()
-      .collection("users")
-      .doc(userId)
       .collection("creatorRequests")
       .doc(requestId);
 
@@ -146,8 +144,6 @@ export namespace CreatorRequestsService {
   export const rejectRequest = async (userId: string, requestId: string) => {
     const requestRef = admin
       .firestore()
-      .collection("users")
-      .doc(userId)
       .collection("creatorRequests")
       .doc(requestId);
 
