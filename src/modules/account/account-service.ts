@@ -56,16 +56,16 @@ export namespace AccountService {
       .collection("creators")
       .doc(profileId)
       .get();
-      console.log("loading profile creator.....")
-      console.log("uid", profileId);
-      console.log("creator", creator.data());
+    console.log("loading profile creator.....");
+    console.log("uid", profileId);
+    console.log("creator", creator.data());
     const isFollower = (await followersCollection).docs.some(
       (doc) => doc.id === userId
     );
     const isFollowing = (await followingCollection).docs.some(
       (doc) => doc.id === userId
     );
-    const user = account.data() as AccountTypes.User
+    const user = account.data() as AccountTypes.User;
     const result: AccountTypes.UserProfileWithPosts = {
       ...user,
       posts: (await postsCollection).docs.map((doc) => ({
@@ -76,7 +76,7 @@ export namespace AccountService {
       followingCount,
       alreadyFollowing: isFollower,
       alreadyFollowedBy: isFollowing,
-      creator: creator as unknown as AccountTypes.Creator,
+      creator: creator.data() as AccountTypes.Creator,
     };
     return result;
   };
