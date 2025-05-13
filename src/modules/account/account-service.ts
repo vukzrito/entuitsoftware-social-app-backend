@@ -25,11 +25,7 @@ export namespace AccountService {
     profileId: string,
     userId: string
   ) => {
-    const account = await admin
-      .firestore()
-      .collection("users")
-      .doc(profileId)
-      .get();
+    const account = await admin.auth().getUser(profileId);
     const db = admin.firestore();
     const postsCollection = db
       .collection("posts")
@@ -65,9 +61,10 @@ export namespace AccountService {
     const isFollowing = (await followingCollection).docs.some(
       (doc) => doc.id === userId
     );
-    const user = account.data() as AccountTypes.User;
+    const user = account as unknown as AccountTypes.User;
     const result: AccountTypes.UserProfileWithPosts = {
       ...user,
+      uid: profileId,
       posts: (await postsCollection).docs.map((doc) => ({
         ...doc.data(),
         id: doc.id,
