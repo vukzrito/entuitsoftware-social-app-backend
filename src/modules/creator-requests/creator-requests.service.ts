@@ -115,7 +115,10 @@ export namespace CreatorRequestsService {
       .collection("creatorRequests")
       .doc(requestId);
 
-    await requestRef.update({ status: "approved" });
+    await requestRef.update({
+      status: "approved",
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    });
 
     const user = (await AccountService.getAccount(
       userId
@@ -147,6 +150,9 @@ export namespace CreatorRequestsService {
       .collection("creatorRequests")
       .doc(requestId);
 
-    await requestRef.update({ status: "rejected" });
+    await requestRef.update({
+      status: "rejected",
+      updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    });
   };
 }
