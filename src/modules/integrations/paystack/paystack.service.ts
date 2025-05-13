@@ -73,6 +73,7 @@ export namespace PayStackService {
     const data = {
       name: `@${username}'s subscription plan`,
       amount: amount,
+      amountInKobo: amount * 100,
       interval: "monthly",
       currency: "ZAR",
     };
