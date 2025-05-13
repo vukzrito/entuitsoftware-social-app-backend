@@ -56,6 +56,9 @@ export namespace AccountService {
       .collection("creators")
       .doc(profileId)
       .get();
+      console.log("loading profile creator.....")
+      console.log("uid", profileId);
+      console.log("creator", creator.data());
     const isFollower = (await followersCollection).docs.some(
       (doc) => doc.id === userId
     );
