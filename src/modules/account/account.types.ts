@@ -1,3 +1,5 @@
+import { PostsTypes } from "../posts/posts.types";
+
 export namespace AccountTypes {
   export type User = {
     uid: string;
@@ -33,5 +35,12 @@ export namespace AccountTypes {
 
   export type UserAccount = User & {
     creator: Creator;
+  };
+  export type UserProfileWithPosts = UserAccount & {
+    posts: PostsTypes.Post[];
+    followersCount: number;
+    followingCount: number;
+    alreadyFollowing: boolean;
+    alreadyFollowedBy: boolean;
   };
 }

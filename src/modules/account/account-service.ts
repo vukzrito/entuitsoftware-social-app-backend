@@ -21,6 +21,62 @@ export namespace AccountService {
       creator,
     } as unknown as AccountTypes.UserAccount;
   };
+  export const getUserProfileWithPosts = async (
+    profileId: string,
+    userId: string
+  ) => {
+    const account = await admin
+      .firestore()
+      .collection("users")
+      .doc(profileId)
+      .get();
+    const db = admin.firestore();
+    const postsCollection = db
+      .collection("posts")
+      .where("authorId", "==", profileId)
+      .get();
+
+    const followersCollection = db
+      .collection("users")
+      .doc(profileId)
+      .collection("followers")
+      .get(); // Subcollection for followers
+
+    const followingCollection = db
+      .collection("users")
+      .doc(profileId)
+      .collection("following")
+      .get(); // Subcollection for following
+
+    const followersCount = (await followersCollection).size;
+    const followingCount = (await followingCollection).size;
+
+    const creator = await admin
+      .firestore()
+      .collection("creators")
+      .doc(profileId)
+      .get();
+    const isFollower = (await followersCollection).docs.some(
+      (doc) => doc.id === userId
+    );
+    const isFollowing = (await followingCollection).docs.some(
+      (doc) => doc.id === userId
+    );
+    const user = account.data() as AccountTypes.User
+    const result: AccountTypes.UserProfileWithPosts = {
+      ...user,
+      posts: (await postsCollection).docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      })) as AccountTypes.UserProfileWithPosts["posts"],
+      followersCount,
+      followingCount,
+      alreadyFollowing: isFollower,
+      alreadyFollowedBy: isFollowing,
+      creator: creator as unknown as AccountTypes.Creator,
+    };
+    return result;
+  };
 
   export const updateAccount = async (userId: string, data: any) => {
     await admin.firestore().collection("users").doc(userId).update(data);
