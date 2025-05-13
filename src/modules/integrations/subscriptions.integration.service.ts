@@ -6,9 +6,10 @@ export const SubscriptionsIntegrationService = {
     username: string,
     amount: number
   ): Promise<SubscriptionsIntegrationTypes.CreateSubscripionSKUsResponse> => {
+    const amountInCents = amount * 100;
     const paystackData = await PayStackService.createSusbcriptionPlan(
       username,
-      amount
+      amountInCents
     );
     const paystackSKU = paystackData.data.plan_code;
     //todo get other IAP SKU
