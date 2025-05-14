@@ -48,6 +48,7 @@ export const paymentsRouter = Router()
       // const userId = req.user?.uid;
       const email = req.user?.email;
       const plan = req.query.plan;
+      const amount = Number.parseFloat(req.query.amount);
       if (!plan) {
         console.error("No subscription plan code provided");
         res.status(400).json({ error: "No subscription plan code provided" });
@@ -60,7 +61,8 @@ export const paymentsRouter = Router()
 
       const response = await PayStackService.getAccessCodeForSubscription(
         email,
-        plan!
+        plan!,
+        amount
       );
       res.status(200).json(response.data);
     }
