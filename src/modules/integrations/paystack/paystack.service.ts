@@ -53,6 +53,7 @@ export namespace PayStackService {
       const client = createClient();
       const response = await client.post("/transaction/initialize", {
         customer: email,
+        email,
         plan: planCode,
         amount,
       });
