@@ -33,10 +33,33 @@ export const paymentsRouter = Router()
         return;
       }
 
-      const response = await PayStackService.getAccessCodeForSubscription(
+      const response = await PayStackService.getAccessCodeForOnceOffPayment(
         email,
         amount,
-        currency,
+        currency
+      );
+      res.status(200).json(response.data);
+    }
+  )
+  .get(
+    "/paystack/initiate-subscription",
+    authenticate,
+    async (req: PaystackAccessCodeRequest, res: Response): Promise<void> => {
+      // const userId = req.user?.uid;
+      const email = req.user?.email;
+      const plan = req.query.plan;
+      if (!plan) {
+        console.error("No subscription plan code provided");
+        res.status(400).json({ error: "No subscription plan code provided" });
+        return;
+      }
+      if (!email) {
+        res.status(400).json({ error: "Email is required" });
+        return;
+      }
+
+      const response = await PayStackService.getAccessCodeForSubscription(
+        email,
         plan!
       );
       res.status(200).json(response.data);

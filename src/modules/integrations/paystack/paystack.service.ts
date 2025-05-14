@@ -46,17 +46,13 @@ export namespace PayStackService {
   };
   export const getAccessCodeForSubscription = async (
     email: string,
-    amount: number,
-    currency: string,
     planCode: string
   ) => {
     try {
       const client = createClient();
       const response = await client.post("/transaction/initialize", {
-        email,
-        amount,
-        currency,
-        plan: planCode
+        customer: email,
+        plan: planCode,
       });
       console.log(response.data); // Handle the response data
       return response.data; // Optionally return the data
