@@ -7,7 +7,7 @@ export const SubscriptionsIntegrationService = {
     amount: number
   ): Promise<SubscriptionsIntegrationTypes.CreateSubscripionSKUsResponse> => {
     const amountInCents = amount * 100;
-    const paystackData = await PayStackService.createSusbcriptionPlan(
+    const paystackData = await PayStackService.createSubscriptionPlan(
       username,
       amountInCents
     );

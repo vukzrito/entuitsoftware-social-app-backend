@@ -65,7 +65,24 @@ export namespace PayStackService {
     }
   };
 
-  export const createSusbcriptionPlan = async (
+  export const completeSubscriptionPayment = async (
+    email: string,
+    planCode: string
+  ) => {
+    const client = createClient();
+    const response = await client.post("/subscription", {
+      customer: email,
+      plan: planCode,
+    });
+    if (response.status !== 200) {
+      console.error("Error completing subscription payment:", response);
+      throw new Error("Failed to complete subscription payment");
+    }
+    console.log("Subscription payment completed:", response.data);
+    return response;
+  };
+
+  export const createSubscriptionPlan = async (
     username: string,
     amount: number
   ): Promise<PayStackTypes.CreatePlanResponse> => {

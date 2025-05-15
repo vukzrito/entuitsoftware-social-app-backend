@@ -68,6 +68,28 @@ export const paymentsRouter = Router()
     }
   )
   .post(
+    "/paystack/complete-subscription",
+    authenticate,
+    async (req: PaystackAccessCodeRequest, res: Response): Promise<void> => {
+      const email = req.user?.email;
+      const plan = req.query.plan;
+      if (!plan) {
+        console.error("No subscription plan code provided");
+        res.status(400).json({ error: "No subscription plan code provided" });
+        return;
+      }
+      if (!email) {
+        res.status(400).json({ error: "Email is required" });
+        return;
+      }
+      const response = await PayStackService.completeSubscriptionPayment(
+        email,
+        plan!
+      );
+      res.status(200).json(response.data);
+    }
+  )
+  .post(
     "/paystack/verify",
     authenticate,
     async (req: Request, res: Response) => {
